@@ -1,0 +1,117 @@
+---
+title: "Wikipedia Hindi/English Page Exploration"
+author: "Molly G Hickman"
+date: "9/30/2019"
+output: html_document
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+library(WikipediR)
+library(pageviews)
+library(distill)
+library(rmarkdown)
+library(dplyr)
+
+start = "2000010112"
+end = "2019100112"
+
+articles_eng = c("Kashmir conflict", "Article 370 of the Constitution of India", "Insurgency in Jammu and Kashmir")
+
+articles_hin = c("कश्मीर_विवाद", "अनुच्छेद_३७०", "जम्मू_और_कश्मीर_में_विद्रोह")
+
+```
+
+## Page Content
+Note: Hindi page content query executes fine, but when you try to create the report it errors out
+
+```{r page content}
+# English
+ekashmir = page_content("en", "wikipedia", page_name = articles_eng[1])
+earticle = page_content("en", "wikipedia", page_name = articles_eng[2])
+einsurg = page_content("en", "wikipedia", page_name = articles_eng[3])
+
+# Hindi
+hkashmir = page_content("hi", "wikipedia", page_name = articles_hin[1])
+harticle = page_content("hi", "wikipedia", page_name = articles_hin[2])
+hinsurg = page_content("hi", "wikipedia", page_name = articles_hin[3])
+                         
+```
+
+## Page Views - English
+
+```{r pageviews Kashmir conflict english}
+ekash_pv = article_pageviews(start=start, end=end, article=articles_eng[1])
+
+# Subset of columns, for all paginated tables
+wantCols = names(ekash_pv) %in% c('project', 'language', 'article', 'date', 'views')
+paged_table(ekash_pv[wantCols])
+```
+
+```{r pageviews Article 370 english}
+e370_pv = article_pageviews(start=start, end=end, article=articles_eng[2])
+paged_table(e370_pv[wantCols])
+```
+
+
+```{r pageviews Jammu and Kashmir english}
+ejamm_pv = article_pageviews(start=start, end=end, article=articles_eng[3])
+paged_table(ejamm_pv[wantCols])
+```
+
+```{r merge to one file for output - english}
+a <- bind_rows(ekash_pv, e370_pv, ejamm_pv)
+write.csv(a, "wiki_english_pageviews_2000_thru_Sep2019.csv")
+```
+
+## Hindi pageviews
+
+```{r pageviews Kashmir conflict hindi}
+hkash_pv = article_pageviews(project="hi.wikipedia", start=start, end=end, article=articles_hin[1])
+hkash_pv$article <- articles_eng[1] # replace unicode nonsense with article name
+paged_table(hkash_pv)
+```
+
+```{r pageviews Article 370 hindi}
+h370_pv = article_pageviews(project="hi.wikipedia", start=start, end=end, article=articles_hin[2])
+h370_pv$article <- articles_eng[2] # replace unicode nonsense with article name
+paged_table(h370_pv[wantCols])
+```
+
+```{r pageviews Jammu and Kashmir hindi}
+hjamm_pv = article_pageviews(project="hi.wikipedia", start=start, end=end, article=articles_hin[3])
+hjamm_pv$article <- articles_eng[3] # replace unicode nonsense with article name
+paged_table(hjamm_pv[wantCols])
+```
+
+```{r merge to one file for output - hindi}
+b <- bind_rows(hkash_pv, h370_pv, hjamm_pv)
+write.csv(b, "wiki_hindi_pageviews_2000_thru_Sep2019.csv")
+```
+
+
+## TODO! In progress - Get last X changes to each page and extract unique editors
+
+Usage error: Recent changes is only for stream of changes on ALL articles in a "project" ("wikipedia.org" is a "project"). Maybe it's time to switch over to Python.
+
+```{r get changes - english... and hindi?}
+
+changesListEng <- lapply(articles_eng, FUN = function(article) {
+  recent_changes(language="en", project=article, domain="wikipedia.org", properties=c("user", "userid", "comment", "parsedcomment", "flags","timestamp", "title"), limit=10, clean_response = TRUE)
+}) 
+
+changesListHin <- lapply(articles_hin, FUN = function(article) {
+  recent_changes(language="hi", project=article, domain="wikipedia.org", properties=c("user", "userid", "comment", "parsedcomment", "flags","timestamp", "title"), limit=10, clean_response = TRUE)
+}) 
+
+changes_one <- recent_changes(language="en", project=articles_eng[1], domain="wikipedia.org", properties=c("user", "userid", "comment", "parsedcomment", "flags","timestamp", "title"), limit=10, clean_response = TRUE)
+
+```
+
+
+```{r unique editors}
+df <- as.data.frame(changesListEng[1])
+
+df1 <- as.data.frame(changes_one)
+```
+
