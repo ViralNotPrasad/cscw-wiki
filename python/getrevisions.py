@@ -10,6 +10,23 @@
     MIT License
 """
 
+def pageOps(fname):
+    # Get unique authors for this page
+    authors = []
+    for rev in page["revisions"]:
+        if rev["user"] not in authors:
+            authors.append(rev["user"]) 
+    with open("../data/authors_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".csv", "w+") as file:
+        for author in authors:
+            file.write(author + "\n")
+    # Write revision data to file
+    with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".txt", "w+") as file:
+            file.write(str(page["revisions"]))
+
+#======ENGLISH======
+
+properties = "timestamp|user|comment|size|content"
+
 import requests
 from datetime import datetime
 
@@ -21,7 +38,7 @@ KASH_EN_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "Kashmir conflict",
-    "rvprop": "timestamp|user|comment", # there's more could add like content
+    "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
@@ -32,7 +49,7 @@ ARTICLE_EN_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "Article 370 of the Constitution of India",
-    "rvprop": "timestamp|user|comment", # there's more could add like content
+    "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
@@ -43,7 +60,7 @@ INSURG_EN_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "Insurgency in Jammu and Kashmir",
-    "rvprop": "timestamp|user|comment", # there's more could add like content
+    "rvprop": "timestamp|user|comment|size",  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
@@ -59,11 +76,7 @@ for fname, params in EN_DICT.items():
     PAGES = DATA["query"]["pages"]
 
     for page in PAGES:
-        print(page)
-        #print(page["revisions"])
-        with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".txt", "w+") as file:
-                file.write(str(page["revisions"]))
-
+        pageOps(fname)
 
 #====================HINDI====================
 
@@ -73,7 +86,7 @@ KASH_HI_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "कश्मीर_विवाद", #Kashmir conflict
-    "rvprop": "timestamp|user|comment", # there's more could add like content
+    "rvprop": properties, 
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
@@ -84,25 +97,25 @@ ARTICLE_HI_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "अनुच्छेद_३७०", #Article 370
-    "rvprop": "timestamp|user|comment", # there's more could add like content
+    "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
     "rvlimit": "500" # Cap at 500 queries which is annoying      
 }
 
-INSURG_HI_PARAMS = {
+'''INSURG_HI_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "जम्मू_और_कश्मीर_में",
-    "rvprop": "timestamp|user|comment", # there's more could add like content
+    "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
     "rvlimit": "500" # Cap at 500 queries which is annoying      
-}
+}'''
 
-HI_DICT = {"kash_hi": KASH_HI_PARAMS, "article_hi": ARTICLE_HI_PARAMS, "insurg_hi": INSURG_HI_PARAMS}
+HI_DICT = {"kash_hi": KASH_HI_PARAMS, "article_hi": ARTICLE_HI_PARAMS}
 
 for fname, params in HI_DICT.items():
     R = S.get(url=URL, params=params)
@@ -111,10 +124,7 @@ for fname, params in HI_DICT.items():
     PAGES = DATA["query"]["pages"]
 
     for page in PAGES:
-        print(page)
-        #print(page["revisions"])
-        with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".txt", "w+") as file:
-                file.write(str(page["revisions"]))
+        pageOps(fname)
 
 #====================URDU====================
 
@@ -124,7 +134,7 @@ KASH_UR_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "مسئلہ_کشمیر", #Kashmir conflict
-    "rvprop": "timestamp|user|comment", # there's more could add like content
+    "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
@@ -135,7 +145,7 @@ ARTICLE_UR_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "آئین_ہند_کی_دفعہ_370", #Article 370
-    "rvprop": "timestamp|user|comment", # there's more could add like content
+    "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
@@ -151,7 +161,5 @@ for fname, params in UR_DICT.items():
     PAGES = DATA["query"]["pages"]
 
     for page in PAGES:
-        print(page)
-        #print(page["revisions"])
-        with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".txt", "w+") as file:
-                file.write(str(page["revisions"]))
+        pageOps(fname)
+               
