@@ -10,6 +10,8 @@
     MIT License
 """
 
+import json
+
 def pageOps(fname):
     # Get unique authors for this page
     authors = []
@@ -20,8 +22,8 @@ def pageOps(fname):
         for author in authors:
             file.write(author + "\n")
     # Write revision data to file
-    with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".txt", "w+") as file:
-            file.write(str(page["revisions"]))
+    with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".json", "w+") as file:
+            json.dump(page["revisions"], file)
 
 #======ENGLISH======
 
