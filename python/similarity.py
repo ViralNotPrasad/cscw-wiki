@@ -3,6 +3,8 @@ from os.path import isfile, join
 import json
 import pandas as pd
 import csv
+from matplotlib_venn import venn2
+from matplotlib import pyplot as plt
 
 def makeDict(mypath):
     thefiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
@@ -75,3 +77,17 @@ for lang in ['hi', 'ur', 'en']:
     print(lang, len(common), "(", len(common)/len(article)*100, "% of Article 370 editors also edited Kashmir Conflict )")
 
 
+# Venn diagrams
+'''
+venn_ur = venn2([set(authors['authors_article_ur_17-10-2019']), set(authors['authors_kash_ur_17-10-2019'])], ('Urdu Article 370', 'Urdu Kashmir Conflict'))
+plt.savefig('Urdu_authors.png')
+plt.clf()
+
+venn_hi = venn2([set(authors['authors_article_hi_17-10-2019']), set(authors['authors_kash_hi_17-10-2019'])], ('Hindi Article 370', 'Hindi Kashmir Conflict'))
+plt.savefig('Hindi_authors.png')
+plt.clf()
+
+venn_en = venn2([set(authors['authors_article_en_17-10-2019']), set(authors['authors_kash_en_17-10-2019'])], ('English Article 370', 'English Kashmir Conflict'))
+plt.savefig('English_authors.png')
+plt.clf()
+'''
