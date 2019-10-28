@@ -15,6 +15,7 @@ import json
 def pageOps(fname):
     # Get unique authors for this page
     authors = []
+    #print("=========" + page["eicontinue"])
     for rev in page["revisions"]:
         if rev["user"] not in authors:
             authors.append(rev["user"]) 
@@ -24,10 +25,11 @@ def pageOps(fname):
     # Write revision data to file
     with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".json", "w+") as file:
             json.dump(page["revisions"], file)
+    print(fname, "# revisions", len(page['revisions']))
 
 #======ENGLISH======
 
-properties = "timestamp|user|comment|size|content"
+properties = "timestamp|user|comment|size"
 
 import requests
 from datetime import datetime
@@ -62,7 +64,7 @@ INSURG_EN_PARAMS = {
     "action": "query",
     "prop": "revisions",
     "titles": "Insurgency in Jammu and Kashmir",
-    "rvprop": "timestamp|user|comment|size",  
+    "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
