@@ -108,18 +108,18 @@ ARTICLE_HI_PARAMS = {
     "rvlimit": "500" # Cap at 500 queries which is annoying      
 }
 
-'''INSURG_HI_PARAMS = {
+INSURG_HI_PARAMS = {
     "action": "query",
     "prop": "revisions",
-    "titles": "जम्मू_और_कश्मीर_में",
+    "titles": "जम्मू_और_कश्मीर_में_विद्रोह",#"जम्मू_और_कश्मीर_में", # Insurgency in Jammu and Kashmir
     "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
     "rvlimit": "500" # Cap at 500 queries which is annoying      
-}'''
+}
 
-HI_DICT = {"kash_hi": KASH_HI_PARAMS, "article_hi": ARTICLE_HI_PARAMS}
+HI_DICT = {"kash_hi": KASH_HI_PARAMS, "article_hi": ARTICLE_HI_PARAMS, "insurg_hi": INSURG_HI_PARAMS}
 
 for fname, params in HI_DICT.items():
     R = S.get(url=URL, params=params)
