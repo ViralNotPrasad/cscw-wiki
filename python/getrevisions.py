@@ -111,7 +111,7 @@ ARTICLE_HI_PARAMS = {
 INSURG_HI_PARAMS = {
     "action": "query",
     "prop": "revisions",
-    "titles": "जम्मू_और_कश्मीर_में_विद्रोह",#"जम्मू_और_कश्मीर_में", # Insurgency in Jammu and Kashmir
+    "titles": "जम्मू_और_कश्मीर_में_विद्रोह", # Insurgency in Jammu and Kashmir
     "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",

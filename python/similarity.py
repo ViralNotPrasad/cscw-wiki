@@ -6,6 +6,8 @@ import csv
 from matplotlib_venn import venn2
 from matplotlib import pyplot as plt
 
+date = '27-10-2019'
+
 def makeDict(mypath):
     thefiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     mydict = {}
@@ -34,15 +36,6 @@ for article, data in authors.items():
         newdata.append(a.rstrip('\n'))
     authors[article] = newdata
 
-'''keys ['authors_article_en_17-10-2019', 
-'authors_article_hi_17-10-2019', 
-'authors_article_ur_17-10-2019', 
-'authors_insurg_en_17-10-2019', 
-'authors_kash_en_17-10-2019', 
-'authors_kash_hi_17-10-2019', 
-'authors_kash_ur_17-10-2019']
-'''
-
 def printAuthStats(keys):
     for a in keys:
         # Print language abbrev : number of unique authors
@@ -52,42 +45,41 @@ print("KASHMIR CONFLICT - LAST 500 EDITS OF EACH PAGE")
 print("===number of editors:")
 printAuthStats([k for k in authors.keys() if 'kash' in k])
 print("===common between english and hindi:")
-print(len(list(set(authors['authors_kash_hi_17-10-2019']) & set(authors['authors_kash_en_17-10-2019']))))
+print(len(list(set(authors['authors_kash_hi_' + date]) & set(authors['authors_kash_en_' + date]))))
 print("===common between english and urdu:")
-print(len(list(set(authors['authors_kash_en_17-10-2019']) & set(authors['authors_kash_ur_17-10-2019']))))
+print(len(list(set(authors['authors_kash_en_' + date]) & set(authors['authors_kash_ur_' + date]))))
 print("===common between hindi and urdu:")
-print(len(list(set(authors['authors_kash_hi_17-10-2019']) & set(authors['authors_kash_ur_17-10-2019']))))
+print(len(list(set(authors['authors_kash_hi_' + date]) & set(authors['authors_kash_ur_' + date]))))
 
 print("ARTICLE 370 - LAST 500 EDITS OF EACH PAGE")
 print("===number of editors:")
 printAuthStats([k for k in authors.keys() if 'article' in k])
 print("===common between english and hindi:")
-print(len(list(set(authors['authors_article_hi_17-10-2019']) & set(authors['authors_article_en_17-10-2019']))))
+print(len(list(set(authors['authors_article_hi_' + date]) & set(authors['authors_article_en_' + date]))))
 print("===common between english and urdu:")
-print(len(list(set(authors['authors_article_en_17-10-2019']) & set(authors['authors_article_ur_17-10-2019']))))
+print(len(list(set(authors['authors_article_en_' + date]) & set(authors['authors_article_ur_' + date]))))
 print("===common between hindi and urdu:")
-print(len(list(set(authors['authors_article_hi_17-10-2019']) & set(authors['authors_article_ur_17-10-2019']))))
+print(len(list(set(authors['authors_article_hi_' + date]) & set(authors['authors_article_ur_' + date]))))
 
 print("EDITORS IN COMMON BETWEEN ARTICLES IN SAME LANGUAGE")
 for lang in ['hi', 'ur', 'en']:
-    common = list(set(authors['authors_article_' + lang + '_17-10-2019']) & set(authors['authors_kash_' + lang + '_17-10-2019']))
-    kash = authors['authors_kash_' + lang + '_17-10-2019']
-    article = authors['authors_article_' + lang + '_17-10-2019']
+    common = list(set(authors['authors_article_' + lang + '_' + date]) & set(authors['authors_kash_' + lang + '_' + date]))
+    kash = authors['authors_kash_' + lang + '_' + date]
+    article = authors['authors_article_' + lang + '_' + date]
     print(lang, len(common), "(", len(common)/len(kash)*100, "% of Kashmir Conflict editors also edited Article 370 )")
     print(lang, len(common), "(", len(common)/len(article)*100, "% of Article 370 editors also edited Kashmir Conflict )")
 
 
 # Venn diagrams
-'''
-venn_ur = venn2([set(authors['authors_article_ur_17-10-2019']), set(authors['authors_kash_ur_17-10-2019'])], ('Urdu Article 370', 'Urdu Kashmir Conflict'))
+
+venn_ur = venn2([set(authors['authors_article_ur_' + date]), set(authors['authors_kash_ur_' + date])], ('Urdu Article 370', 'Urdu Kashmir Conflict'))
 plt.savefig('Urdu_authors.png')
 plt.clf()
 
-venn_hi = venn2([set(authors['authors_article_hi_17-10-2019']), set(authors['authors_kash_hi_17-10-2019'])], ('Hindi Article 370', 'Hindi Kashmir Conflict'))
+venn_hi = venn2([set(authors['authors_article_hi_' + date]), set(authors['authors_kash_hi_' + date])], ('Hindi Article 370', 'Hindi Kashmir Conflict'))
 plt.savefig('Hindi_authors.png')
 plt.clf()
 
-venn_en = venn2([set(authors['authors_article_en_17-10-2019']), set(authors['authors_kash_en_17-10-2019'])], ('English Article 370', 'English Kashmir Conflict'))
+venn_en = venn2([set(authors['authors_article_en_' + date]), set(authors['authors_kash_en_' + date])], ('English Article 370', 'English Kashmir Conflict'))
 plt.savefig('English_authors.png')
 plt.clf()
-'''
