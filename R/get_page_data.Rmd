@@ -20,6 +20,8 @@ articles_eng = c("Kashmir conflict", "Article 370 of the Constitution of India",
 
 articles_hin = c("कश्मीर_विवाद", "अनुच्छेद_३७०", "जम्मू_और_कश्मीर_में_विद्रोह")
 
+articles_urd = c("آئین_ہند_کی_دفعہ_370", "مسئلہ_کشمیر")
+
 ```
 
 ## Page Content
@@ -97,6 +99,24 @@ b <- bind_rows(hkash_pv, h370_pv, hjamm_pv)
 write.csv(b, "wiki_hindi_pageviews_2000_thru_Sep2019.csv")
 ```
 
+## Urdu pageviews
+
+```{r pageviews Kashmir Conflict urdu}
+ukash_pv = article_pageviews(project="ur.wikipedia", start=start, end=end, article=articles_urd[1])
+ukash_pv$article <- articles_eng[1] # replace unicode nonsense with article name
+paged_table(ukash_pv)
+```
+
+```{r pageviews Article 370 urdu}
+u370_pv = article_pageviews(project="ur.wikipedia", start=start, end=end, article=articles_urd[2])
+u370_pv$article <- articles_eng[2] # replace unicode nonsense with article name
+paged_table(u370_pv)
+```
+
+```{r merge to one file for output - urdu}
+b <- bind_rows(ukash_pv, u370_pv)
+write.csv(b, "wiki_urdu_pageviews_2000_thru_Sep2019.csv")
+```
 
 ## TODO! In progress - Get last X changes to each page and extract unique editors
 
