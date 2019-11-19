@@ -39,9 +39,17 @@ hinsurg = page_content("hi", "wikipedia", page_name = articles_hin[3])
 ```
 
 ## Page Views - English
+```{r pageviews all fields?}
+ekash_pv = article_pageviews(start=start, end=end, article=articles_eng[1])
+
+colnames(ekash_pv)
+
+ekash_pv$agent
+
+```
+
 
 ```{r pageviews Kashmir conflict english}
-ekash_pv = article_pageviews(start=start, end=end, article=articles_eng[1])
 
 # Subset of columns, for all paginated tables
 wantCols = names(ekash_pv) %in% c('project', 'language', 'article', 'date', 'views')
