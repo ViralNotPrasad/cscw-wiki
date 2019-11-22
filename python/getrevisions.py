@@ -10,113 +10,160 @@
     MIT License
 """
 
-import pprint
-import requests
-from datetime import datetime
 import json
 
-#============ file saving ===========
-
-def pageOps(fname, revisions):
+def pageOps(fname):
     # Get unique authors for this page
     authors = []
-    for rev in revisions:
-        if "user" in rev:
+    #print("=========" + page["eicontinue"])
+    for rev in page["revisions"]:
+        if rev["user"] not in authors:
             authors.append(rev["user"]) 
-        elif "userhidden" in rev:
-            authors.append("anon")
-        else:
-            print ("strange format: " + str(rev))
-        authors = list(set(authors))
-
-    #save to files
     with open("../data/authors_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".csv", "w+") as file:
         for author in authors:
             file.write(author + "\n")
     # Write revision data to file
     with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".json", "w+") as file:
-            json.dump(revisions, file)
-    print(fname, "# revisions", len(revisions))
+            json.dump(page["revisions"], file)
+    print(fname, "# revisions", len(page['revisions']))
 
+#======ENGLISH======
 
-#============ request parameters ===========
+properties = "timestamp|user|comment|size"
 
-GLOBAL_PARAMS = {
+import requests
+from datetime import datetime
+
+S = requests.Session()
+
+URL = "https://en.wikipedia.org/w/api.php"
+
+KASH_EN_PARAMS = {
     "action": "query",
     "prop": "revisions",
-    "titles": "",
-    "rvprop": "timestamp|user|comment|size",  # append content if you want the contents but it will take forever to run
+    "titles": "Kashmir conflict",
+    "rvprop": properties,  
     "rvslots": "main",
     "formatversion": "2",
     "format": "json",
-    "rvlimit": "500" 
+    "rvlimit": "500" # Cap at 500 queries which is annoying
 }
 
-# XX_URL - url for XX lang
-# XX_DICT - mapping from filename to "title" parameter value
-
-EN_URL = "https://en.wikipedia.org/w/api.php"
-EN_DICT = { 
-    "kash_en": "Kashmir conflict", 
-    "article_en": "Article 370 of the Constitution of India", 
-    "insurg_en": "Insurgency in Jammu and Kashmir" 
+ARTICLE_EN_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "Article 370 of the Constitution of India",
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying
 }
 
-HI_URL = "https://hi.wikipedia.org/w/api.php"
-HI_DICT = {
-    "kash_hi": "कश्मीर_विवाद", #Kashmir conflict
-    "article_hi": "अनुच्छेद_३७०", #Article 370
-    "insurg_hi": "जम्मू_और_कश्मीर_में_विद्रोह" # Insurgency in Jammu and Kashmir 
+INSURG_EN_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "Insurgency in Jammu and Kashmir",
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying   
 }
 
-UR_URL = "https://ur.wikipedia.org/w/api.php"
-UR_DICT = {
-    "kash_ur": "مسئلہ_کشمیر", #Kashmir conflict
-    "article_ur": "آئین_ہند_کی_دفعہ_370", #Article 370 
+EN_DICT = {"kash_en": KASH_EN_PARAMS, "article_en": ARTICLE_EN_PARAMS, "insurg_en": INSURG_EN_PARAMS}
+
+for fname, params in EN_DICT.items():
+    R = S.get(url=URL, params=params)
+    DATA = R.json()
+
+    PAGES = DATA["query"]["pages"]
+
+    for page in PAGES:
+        pageOps(fname)
+
+#====================HINDI====================
+
+URL = "https://hi.wikipedia.org/w/api.php"
+
+KASH_HI_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "कश्मीर_विवाद", #Kashmir conflict
+    "rvprop": properties, 
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying   
 }
 
-# final sanity mapping, XX url to XX dict
-EN = { EN_URL:EN_DICT }
-HI = { HI_URL:HI_DICT }
-UR = { UR_URL:UR_DICT }
+ARTICLE_HI_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "अनुच्छेद_३७०", #Article 370
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying      
+}
 
+INSURG_HI_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "जम्मू_और_कश्मीर_में_विद्रोह", # Insurgency in Jammu and Kashmir
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying      
+}
 
-#============ revision history request ===========
+HI_DICT = {"kash_hi": KASH_HI_PARAMS, "article_hi": ARTICLE_HI_PARAMS, "insurg_hi": INSURG_HI_PARAMS}
 
-S = requests.Session()
-#pp = pprint.PrettyPrinter(indent=2)
+for fname, params in HI_DICT.items():
+    R = S.get(url=URL, params=params)
+    DATA = R.json()
 
-#pp.pprint([EN, HI, UR])
-for LANG in [EN, HI, UR]:
-    #pp.pprint(LANG)
-    for LANG_URL in LANG:
-        LANG_DICT = LANG[LANG_URL]
-        for fname in LANG_DICT:
-            ARTICLE_URL = LANG_DICT[fname]
-            # point to correct lang-specific article, reset rvcontinue
-            GLOBAL_PARAMS["titles"] = ARTICLE_URL
-            if "rvcontinue" in GLOBAL_PARAMS:
-                del GLOBAL_PARAMS["rvcontinue"]
+    PAGES = DATA["query"]["pages"]
 
-            # first request, variable init befor loop
-            R = S.get(url=LANG_URL, params=GLOBAL_PARAMS)
-            DATA = R.json()
-            revisions = DATA["query"]["pages"][0]["revisions"]
-            print(len(revisions))
+    for page in PAGES:
+        pageOps(fname)
 
-            # if total > rvlimit, API will chunk it and offer "continue" param
-            # which just needs to be added to the next request
-            while True:
-                if "continue" in DATA:
-                    print(DATA["continue"])
-                    GLOBAL_PARAMS["rvcontinue"] = DATA["continue"]["rvcontinue"]
-                    R = S.get(url=LANG_URL, params=GLOBAL_PARAMS)
-                    DATA = R.json()
-                    newrevs = DATA["query"]["pages"][0]["revisions"]
-                    print(len(newrevs))
-                    revisions += newrevs
-                else:
-                    print("==============END==============")
-                    break
+#====================URDU====================
 
-            pageOps(fname, revisions)
+URL = "https://ur.wikipedia.org/w/api.php"
+
+KASH_UR_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "مسئلہ_کشمیر", #Kashmir conflict
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying   
+}
+
+ARTICLE_UR_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "آئین_ہند_کی_دفعہ_370", #Article 370
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying      
+}
+
+UR_DICT = {"kash_ur": KASH_UR_PARAMS, "article_ur": ARTICLE_UR_PARAMS}
+
+for fname, params in UR_DICT.items():
+    R = S.get(url=URL, params=params)
+    DATA = R.json()
+
+    PAGES = DATA["query"]["pages"]
+
+    for page in PAGES:
+        pageOps(fname)
+               
