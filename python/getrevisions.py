@@ -71,7 +71,29 @@ INSURG_EN_PARAMS = {
     "rvlimit": "500" # Cap at 500 queries which is annoying   
 }
 
-EN_DICT = {"kash_en": KASH_EN_PARAMS, "article_en": ARTICLE_EN_PARAMS, "insurg_en": INSURG_EN_PARAMS}
+REORG_EN_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "Jammu and Kashmir Reorganisation Act, 2019",
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying   
+}
+
+PULWAMA_EN_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "2019 Pulwama attack",
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying   
+}
+
+EN_DICT = {"kash_en": KASH_EN_PARAMS, "article_en": ARTICLE_EN_PARAMS, "insurg_en": INSURG_EN_PARAMS, "reorg_en": REORG_EN_PARAMS, "pulwama_en": PULWAMA_EN_PARAMS}
 
 for fname, params in EN_DICT.items():
     R = S.get(url=URL, params=params)
@@ -119,7 +141,18 @@ INSURG_HI_PARAMS = {
     "rvlimit": "500" # Cap at 500 queries which is annoying      
 }
 
-HI_DICT = {"kash_hi": KASH_HI_PARAMS, "article_hi": ARTICLE_HI_PARAMS, "insurg_hi": INSURG_HI_PARAMS}
+PULWAMA_HI_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "२०१९_पुलवामा_हमला", # Pulwama Attack
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying      
+}
+
+HI_DICT = {"kash_hi": KASH_HI_PARAMS, "article_hi": ARTICLE_HI_PARAMS, "insurg_hi": INSURG_HI_PARAMS, "pulwama_hi": PULWAMA_HI_PARAMS}
 
 for fname, params in HI_DICT.items():
     R = S.get(url=URL, params=params)
@@ -156,7 +189,29 @@ ARTICLE_UR_PARAMS = {
     "rvlimit": "500" # Cap at 500 queries which is annoying      
 }
 
-UR_DICT = {"kash_ur": KASH_UR_PARAMS, "article_ur": ARTICLE_UR_PARAMS}
+REORG_UR_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "جموں_و_کشمیر_تنظیم_نو_ایکٹ،_2019ء", #Reorganization
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying      
+}
+
+PULWAMA_UR_PARAMS = {
+    "action": "query",
+    "prop": "revisions",
+    "titles": "پلوامہ_حملہ،_2019ء", #Pulwama Attack
+    "rvprop": properties,  
+    "rvslots": "main",
+    "formatversion": "2",
+    "format": "json",
+    "rvlimit": "500" # Cap at 500 queries which is annoying      
+}
+
+UR_DICT = {"kash_ur": KASH_UR_PARAMS, "article_ur": ARTICLE_UR_PARAMS, "reorg_ur": REORG_UR_PARAMS, "pulwama_ur": PULWAMA_UR_PARAMS}
 
 for fname, params in UR_DICT.items():
     R = S.get(url=URL, params=params)
