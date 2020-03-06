@@ -1,4 +1,4 @@
-# getrevision2.py actually works - saving this just in case 
+# getrevision.py actually works - saving this just in case 
 
 import urllib.request
 import re
