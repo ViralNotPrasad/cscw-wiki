@@ -16,9 +16,9 @@ library(dplyr)
 start = "2000010112"
 end = "2019100112"
 
-articles_eng = c("Kashmir conflict", "Article 370 of the Constitution of India", "Insurgency in Jammu and Kashmir")
+articles_eng = c("Kashmir conflict", "Article 370 of the Constitution of India", "Insurgency in Jammu and Kashmir", "Jammu and Kashmir Reorganisation Act, 2019", "2019 Pulwama attack")
 
-articles_hin = c("कश्मीर_विवाद", "अनुच्छेद_३७०", "जम्मू_और_कश्मीर_में_विद्रोह")
+articles_hin = c("कश्मीर_विवाद", "अनुच्छेद_३७०", "जम्मू_और_कश्मीर_में_विद्रोह", "२०१९_पुलवामा_हमला", "जम्मू_और_कश्मीर_पुनर्गठन_अधिनियम,_2019")
 
 ```
 
