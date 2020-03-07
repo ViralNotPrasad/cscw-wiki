@@ -14,12 +14,13 @@ library(rmarkdown)
 library(dplyr)
 
 start = "2000010112"
-end = "2019100112"
+end = "2019102912"
 
 articles_eng = c("Kashmir conflict", "Article 370 of the Constitution of India", "Insurgency in Jammu and Kashmir")
 
 articles_hin = c("कश्मीर_विवाद", "अनुच्छेद_३७०", "जम्मू_और_कश्मीर_में_विद्रोह")
 
+articles_ur = c("آئین_ہند_کی_دفعہ_370", "مسئلہ_کشمیر")
 ```
 
 ## Page Content
@@ -89,6 +90,22 @@ b <- bind_rows(hkash_pv, h370_pv, hjamm_pv)
 write.csv(b, "wiki_hindi_pageviews_2000_thru_Sep2019.csv")
 ```
 
+```{r urdu articles}
+ukash_pv = article_pageviews(project="ur.wikipedia", start=start, end=end, article=articles_ur[1])
+ukash_pv$article <- articles_eng[1]
+
+u370_pv = article_pageviews(project="ur.wikipedia", start=start, end=end, article=articles_ur[2])
+u370_pv$article <- articles_eng[2]
+
+paged_table(u370_pv[wantCols])
+
+```
+
+```{r bind rows and write}
+
+b <- bind_rows(ukash_pv, u370_pv)
+write.csv(b, "wiki_urdu_pageviews_2000_thru_Sep2019.csv")
+```
 
 ## TODO! In progress - Get last X changes to each page and extract unique editors
 
