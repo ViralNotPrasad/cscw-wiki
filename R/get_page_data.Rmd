@@ -59,9 +59,19 @@ ejamm_pv = article_pageviews(start=start, end=end, article=articles_eng[3])
 paged_table(ejamm_pv[wantCols])
 ```
 
+```{r pageviews Reorganisation english}
+ereorg_pv = article_pageviews(start=start, end=end, article=articles_eng[4])
+paged_table(ereorg_pv[wantCols])
+```
+
+```{r pageviews Pulwama english}
+epulw_pv = article_pageviews(start=start, end=end, article=articles_eng[5])
+paged_table(epulw_pv[wantCols])
+```
+
 ```{r merge to one file for output - english}
-a <- bind_rows(ekash_pv, e370_pv, ejamm_pv)
-write.csv(a, "wiki_english_pageviews_2000_thru_Sep2019.csv")
+a <- bind_rows(ekash_pv, e370_pv, ejamm_pv, ereorg_pv, epulw_pv)
+write.csv(a, "wiki_english_pageviews_2000_thru_Jan2020.csv")
 ```
 
 ## Hindi pageviews
@@ -83,10 +93,20 @@ hjamm_pv = article_pageviews(project="hi.wikipedia", start=start, end=end, artic
 hjamm_pv$article <- articles_eng[3] # replace unicode nonsense with article name
 paged_table(hjamm_pv[wantCols])
 ```
+```{r pageviews Reorganisation hindi}
+hreorg_pv = article_pageviews(project="hi.wikipedia", start=start, end=end, article=articles_hin[4])
+hreorg_pv$article <- articles_eng[4] # replace unicode nonsense with article name
+paged_table(hreorg_pv[wantCols])
+```
+```{r pageviews Pulwama hindi}
+hpulw_pv = article_pageviews(project="hi.wikipedia", start=start, end=end, article=articles_hin[5])
+hpulw_pv$article <- articles_eng[5] # replace unicode nonsense with article name
+paged_table(hpulw_pv[wantCols])
+```
 
 ```{r merge to one file for output - hindi}
-b <- bind_rows(hkash_pv, h370_pv, hjamm_pv)
-write.csv(b, "wiki_hindi_pageviews_2000_thru_Sep2019.csv")
+b <- bind_rows(hkash_pv, h370_pv, hjamm_pv, hreorg_pv, hpulw_pv)
+write.csv(b, "wiki_hindi_pageviews_2000_thru_Jan2020.csv")
 ```
 
 
