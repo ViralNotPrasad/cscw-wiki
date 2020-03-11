@@ -3,8 +3,8 @@
 import urllib.request
 import re
 
-def GetRevisions(pageTitle):
-    url = "https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=revisions&titles=" + pageTitle
+def GetRevisions(pageTitle, langshort):
+    url = "https://" + langshort + ".wikipedia.org/w/api.php?action=query&format=xml&prop=revisions&titles=" + pageTitle
     revisions = []                                        #list of all accumulated revisions
     next = ''                                             #information for the next request
     while True:
@@ -26,8 +26,11 @@ def GetRevisions(pageTitle):
     print(response)
     return revisions
 
-testrev = GetRevisions("Kashmir conflict")
-print(testrev)
+#testrev = GetRevisions("Kashmir_conflict", "en")
+ 
+GetRevisions("مسئلہ_کشمیر", "ur")   
+
+#print(testrev)
 
 
 
