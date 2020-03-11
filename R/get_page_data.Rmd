@@ -14,7 +14,7 @@ library(rmarkdown)
 library(dplyr)
 
 start = "2000010112"
-end = "2019100112"
+end = "2020010112"
 
 articles_eng = c("Kashmir conflict", "Article 370 of the Constitution of India", "Insurgency in Jammu and Kashmir", "Jammu and Kashmir Reorganisation Act, 2019", "2019 Pulwama attack")
 
