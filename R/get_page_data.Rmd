@@ -105,7 +105,7 @@ paged_table(hreorg_pv[wantCols])
 
 ```{r pageviews Pulwama Attack hindi}
 hpulwama_pv = article_pageviews(start=start, end=end, article=articles_hin[5])
-paged_table(epulwama_pv[wantCols])
+paged_table(hpulwama_pv[wantCols])
 ```
 
 ```{r merge to one file for output - hindi}
