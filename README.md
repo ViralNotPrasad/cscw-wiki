@@ -4,11 +4,13 @@
 
 ## Code road-map
 * Page-views/edits code and plots: R/Pageviews-edits-data-viz-Clean.ipynb
-** Inputs: R/wiki_<language>_pageviews_<dates>.csv files; data/revisions/rev_<article>_<lang>_<datetime>.json files
+```
+* Inputs: R/wiki_<language>_pageviews_<dates>.csv files; data/revisions/rev_<article>_<lang>_<datetime>.json files
 ** Outputs: some figures to the plots/ dir; R/pearson_df.csv
 * Peak cross-correlation: python/corr_math.py (exact numbers for TLCC)
 ** Inputs: R/pearson_df.csv
 ** Outputs: No files
+```
 
 ## TODO:
 ### Soon:
