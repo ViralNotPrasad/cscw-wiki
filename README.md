@@ -17,6 +17,22 @@
 * Inputs: R/pearson_df.csv
 * Outputs: No files
 ```
+* Page-views data pull: R/get-page-data.Rmd
+```
+* Inputs: None
+* Outputs: R/wiki_<language>_pageviews_<dates>.csv files
+```
+* Similarity (Jaccard) computation: python/similarity.py
+```
+* Inputs:
+* Outputs:
+```
+* Revisions data pull: python/getrevisions.py
+```
+* Inputs:
+* Outputs:
+```
+(work in progress)
 
 ## TODO:
 ### Soon:
