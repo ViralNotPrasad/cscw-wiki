@@ -2,6 +2,15 @@
 
 ## The articles
 
+OG:
+- https://en.wikipedia.org/wiki/Kashmir_conflict
+- https://en.wikipedia.org/wiki/Article_370_of_the_Constitution_of_India
+- https://en.wikipedia.org/wiki/Insurgency_in_Jammu_and_Kashmir
+
+Possible new articles:
+- https://en.wikipedia.org/wiki/Jammu_and_Kashmir_Reorganisation_Act,_2019
+- https://en.wikipedia.org/wiki/2019_Pulwama_attack
+
 ## Code road-map
 * Page-views/edits code and plots: R/Pageviews-edits-data-viz-Clean.ipynb
 ```
