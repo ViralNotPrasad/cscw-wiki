@@ -109,7 +109,7 @@ paged_table(epulwama_pv[wantCols])
 ```
 
 ```{r merge to one file for output - hindi}
-b <- bind_rows(hkash_pv, h370_pv, hjamm_pv, hreorg_pv, hpulwama_pv)
+b <- bind_rows(hkash_pv, h370_pv, hjamm_pv) #hreorg_pv, hpulwama_pv)
 write.csv(b, "wiki_hindi_pageviews_2000_thru_Mar2020.csv")
 ```
 
@@ -129,6 +129,6 @@ paged_table(u370_pv[wantCols])
 
 ```{r merge to one file for output - hindi}
 b <- bind_rows(ukash_pv, u370_pv) # no insurgency article
-write.csv(b, "wiki_urdu_pageviews_2000_thru_Mar2019.csv")
+write.csv(b, "wiki_urdu_pageviews_2000_thru_Mar2020.csv")
 ```
 
