@@ -14,7 +14,7 @@ library(rmarkdown)
 library(dplyr)
 
 start = "2000010112"
-end = "2020010112"
+end = "2020040112" # April 2020
 
 articles_eng = c("Kashmir conflict", "Article 370 of the Constitution of India", "Insurgency in Jammu and Kashmir", "Jammu and Kashmir Reorganisation Act, 2019", "2019 Pulwama attack")
 
@@ -51,6 +51,7 @@ wantCols = names(ekash_pv) %in% c('project', 'language', 'article', 'date', 'vie
 paged_table(ekash_pv[wantCols])
 ```
 
+
 ```{r pageviews Article 370 english}
 e370_pv = article_pageviews(start=start, end=end, article=articles_eng[2])
 paged_table(e370_pv[wantCols])
@@ -62,9 +63,19 @@ ejamm_pv = article_pageviews(start=start, end=end, article=articles_eng[3])
 paged_table(ejamm_pv[wantCols])
 ```
 
+```{r pageviews Reorganisation english}
+ereorg_pv = article_pageviews(start=start, end=end, article=articles_eng[4])
+paged_table(ereorg_pv[wantCols])
+```
+
+```{r pageviews Pulwama Attack english}
+epulwama_pv = article_pageviews(start=start, end=end, article=articles_eng[5])
+paged_table(epulwama_pv[wantCols])
+```
+
 ```{r merge to one file for output - english}
-a <- bind_rows(ekash_pv, e370_pv, ejamm_pv)
-write.csv(a, "wiki_english_pageviews_2000_thru_Dec2019.csv")
+a <- bind_rows(ekash_pv, e370_pv, ejamm_pv, ereorg_pv, epulwama_pv)
+write.csv(a, "wiki_english_pageviews_2000_thru_Mar2020.csv")
 ```
 
 ## Hindi pageviews
@@ -87,9 +98,19 @@ hjamm_pv$article <- articles_eng[3] # replace unicode nonsense with article name
 paged_table(hjamm_pv[wantCols])
 ```
 
+```{r pageviews Reorganisation hindi}
+hreorg_pv = article_pageviews(start=start, end=end, article=articles_hin[4])
+paged_table(hreorg_pv[wantCols])
+```
+
+```{r pageviews Pulwama Attack hindi}
+hpulwama_pv = article_pageviews(start=start, end=end, article=articles_hin[5])
+paged_table(epulwama_pv[wantCols])
+```
+
 ```{r merge to one file for output - hindi}
-b <- bind_rows(hkash_pv, h370_pv, hjamm_pv)
-write.csv(b, "wiki_hindi_pageviews_2000_thru_Dec2019.csv")
+b <- bind_rows(hkash_pv, h370_pv, hjamm_pv, hreorg_pv, hpulwama_pv)
+write.csv(b, "wiki_hindi_pageviews_2000_thru_Mar2020.csv")
 ```
 
 ## Urdu pageviews
@@ -108,6 +129,6 @@ paged_table(u370_pv[wantCols])
 
 ```{r merge to one file for output - hindi}
 b <- bind_rows(ukash_pv, u370_pv) # no insurgency article
-write.csv(b, "wiki_urdu_pageviews_2000_thru_Dec2019.csv")
+write.csv(b, "wiki_urdu_pageviews_2000_thru_Mar2019.csv")
 ```
 
