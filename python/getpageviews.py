@@ -48,7 +48,7 @@ def main():
   Loop through languages and articles; clean up; write data to csv
   ---
   Parameters: none
-  Returns: nothing, just writes one file per language to current dir
+  Returns: nothing, just writes one file per language to ~/data/pageviews
   ---
   '''
   for lang in ARTICLES_DICT.keys():
@@ -75,14 +75,21 @@ def main():
       # Remove semi-colons from en names
       if lang == "en":
         articleDF.article = articleDF.article[0].replace("_", " ")
-      
+        
+      # Change timestamp field to what R script used to do
+      dateCol = articleDF.timestamp.apply(lambda x: x[:4]+"-"+x[4:6]+\
+                                                 "-"+x[6:8])
+      articleDF['date'] = dateCol
+      articleDF = articleDF.drop('timestamp', axis=1)
+     
       print(articleDF.head())
-      
+
       dfList.append(articleDF)
-      
+            
     # Put the DFs for this language together into one DF and save
     wholeDf = pd.concat(dfList)
-    wholeDf.to_csv("wiki_" + lang + "_pageviews_2000_thru_Mar2020.csv")
+    wholeDf.to_csv("../data/pageviews/wiki_" + lang + \
+                   "_pageviews_2000_thru_Mar2020.csv")
   
 
 if __name__ == "__main__":
