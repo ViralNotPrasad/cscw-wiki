@@ -12,8 +12,8 @@ Pageviews datat pull via pageviewsapi (previously done in R via WikipediR)
 import pageviewapi
 import pandas as pd
 
-start = 20190101
-end = 20200401
+start = 20180101
+end = 20190101
 
 # Urdu articles are in a different order from the others, but this was the best I could do.
 # Copy/paste does not work with Arabic script as you'd expect.
@@ -21,12 +21,11 @@ end = 20200401
 
 ARTICLES_DICT = {"en": ["Kashmir_conflict",
                             "Article_370_of_the_Constitution_of_India",
-                            "Insurgency_in_Jammu_and_Kashmir",
-                            "2019_Pulwama_attack",
-                            "Jammu_and_Kashmir_Reorganisation_Act,_2019"],
-                "hi": ["कश्मीर_विवाद", "अनुच्छेद_३७०", "जम्मू_और_कश्मीर_में_विद्रोह",
-                                                              "२०१९_पुलवामा_हमला", "जम्मू_और_कश्मीर_पुनर्गठन_अधिनियम,_2019"],
-                "ur":[ "مسئلہ_کشمیر","آئین_ہند_کی_دفعہ_370", "جموں_و_کشمیر_تنظیم_نو_ایکٹ،_2019ء","پلوامہ_حملہ،_2019ء"]}
+                            "Insurgency_in_Jammu_and_Kashmir"],
+                            #"2019_Pulwama_attack",
+                            #"Jammu_and_Kashmir_Reorganisation_Act,_2019"
+                "hi": ["कश्मीर_विवाद", "अनुच्छेद_३७०", "जम्मू_और_कश्मीर_में_विद्रोह"],
+                "ur":["مسئلہ_کشمیر"]}
 
 
 def getPageviews(articleName, lang):
@@ -56,7 +55,7 @@ def main():
     dfList = []
     
     for article in ARTICLES_DICT[lang]:
-      
+      print(lang, article)
       # Call getPageviews for lang/article pair
       articleDF = getPageviews(article, lang)
       
@@ -89,7 +88,7 @@ def main():
     # Put the DFs for this language together into one DF and save
     wholeDf = pd.concat(dfList)
     wholeDf.to_csv("../data/pageviews/wiki_" + lang + \
-                   "_pageviews_2000_thru_Mar2020.csv")
+                   "_pageviews_2018.csv")
   
 
 if __name__ == "__main__":
