@@ -11,6 +11,9 @@
 """
 
 import json
+import pdb
+import requests
+from datetime import datetime
 
 def pageOps(fname):
     # Get unique authors for this page
@@ -19,20 +22,18 @@ def pageOps(fname):
     for rev in page["revisions"]:
         if rev["user"] not in authors:
             authors.append(rev["user"]) 
+            #pdb.set_trace()
     with open("../data/authors_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".csv", "w+") as file:
         for author in authors:
             file.write(author + "\n")
     # Write revision data to file
     with open("../data/rev_" + fname + "_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".json", "w+") as file:
             json.dump(page["revisions"], file)
-    print(fname, "# revisions", len(page['revisions']))
+    print(fname, "# revisions", len(page['revisions']))        
 
 #======ENGLISH======
 
-properties = "timestamp|user|comment|size"
-
-import requests
-from datetime import datetime
+properties = "timestamp|user|comment|size|ids"
 
 S = requests.Session()
 
