@@ -23,9 +23,9 @@ def get_revids(fname):
     """
     with open(fname) as json_file:
         data = json.load(json_file)
-        revids = []
+        revids = {}
         for item in data:
-            revids.append(item['revid'])
+            revids[item['revid']] = item['timestamp']
     return revids
 
 def format_revert(revert):
@@ -39,46 +39,34 @@ def format_revert(revert):
   
 mypath = "../data/revisions/"
 session = mwapi.Session("https://en.wikipedia.org") 
-for fname in ["rev_insurg_en_21-05-2020 23-17-59.json"]: # For each file (each article in the language)
-            revid_list = get_revids(mypath + fname)
-            netcount = 0
-            revertedcount = 0
-            failures = 0
-            for revid in revid_list:
-                #print("REVID:", revid)
-                reverting, reverted, reverted_to = mwreverts.api.check(session, revid) 
-                if reverted != None:
-                    revertedcount += 1
-                #print("reverting:", format_revert(reverting))
-                #print("reverted:", format_revert(reverted))
-                #print("reverted_to:", format_revert(reverted_to))
-                netcount += 1  
-            print("File:", fname)
-            print("Total:", netcount)
-            print("Reverted:", revertedcount)
-            if netcount != 0:
-                print("Reverted / Total:", revertedcount/netcount)
-            print("Failures:", failures) #https://github.com/mediawiki-utilities/python-mwreverts/issues/11
-            print("---------------")
+    
   
-if False:  
-    for lang in ["hi", "en", "ur"]:
+if True:  
+    for lang in ["hi", "en", "_ur_"]:
         print("Language:", lang)
         thefiles = [f for f in listdir(mypath) if (isfile(join(mypath, f)) and \
                                        (lang in f)) and ("history" not in f)]
         session = mwapi.Session("https://" + lang + ".wikipedia.org")
         
         for fname in thefiles: # For each file (each article in the language)
-            revid_list = get_revids(mypath + fname)
+            revids = get_revids(mypath + fname)
             netcount = 0
             revertedcount = 0
             failures = 0
-            for revid in revid_list:
+            reversions = []
+            for revid in revids:
                 #print("REVID:", revid)
                 try:
                     reverting, reverted, reverted_to = mwreverts.api.check(session, revid) 
                     if reverted != None:
                         revertedcount += 1
+                        #pdb.set_trace()
+                        # tuple with date of reverted edit and date that it was reverted
+                        revert, bad, back_to = format_revert(reverted).split(' ')
+                        bad = int(bad.strip('[]'))
+                        revert = int(revert)
+                        reversions.append((revids[bad], revids[revert]))
+
                 except:
                     failures += 1
                 #print("reverting:", format_revert(reverting))
@@ -92,9 +80,9 @@ if False:
             if netcount != 0:
                 print("Reverted / Total:", revertedcount/netcount)
             print("Failures:", failures) #https://github.com/mediawiki-utilities/python-mwreverts/issues/11
+            print(reversions)
             print("---------------")
 
-        
 
 
 
