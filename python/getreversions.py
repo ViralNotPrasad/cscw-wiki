@@ -12,9 +12,12 @@ import mwapi
 import mwapi.cli
 import mwreverts.api
 import pdb
+import pandas as pd
+from datetime import datetime
 import json
 from os import listdir
 from os.path import isfile, join
+import re
 
 
 def get_revids(fname):
@@ -36,12 +39,27 @@ def format_revert(revert):
                          str([r['revid'] for r in revert.reverteds]),
                          str(revert.reverted_to['revid'])])
 
+def multi_reverted(formatted_revert): 
+    if len(formatted_revert.split(' ')) == 3:
+        revert, bad, back_to = formatted_revert.split(' ')
+        bad = int(bad.strip('[]'))
+        revert = int(revert)
+    else:
+        full = formatted_revert.split(' ')
+        revert = int(full[0])
+        bad = []
+        for i in range(len(full) - 2):
+            bad.append(int(full[ 1 + i ].strip('[,]'))) # the middle ones (all but first and last)
+    return revert, bad
+
+        
   
 mypath = "../data/revisions/"
 session = mwapi.Session("https://en.wikipedia.org") 
     
   
-if True:  
+if True:          
+    df = pd.DataFrame({'fname': [], 'edit': [], 'reverted': []})
     for lang in ["hi", "en", "_ur_"]:
         print("Language:", lang)
         thefiles = [f for f in listdir(mypath) if (isfile(join(mypath, f)) and \
@@ -53,22 +71,30 @@ if True:
             netcount = 0
             revertedcount = 0
             failures = 0
-            reversions = []
             for revid in revids:
                 #print("REVID:", revid)
+                reverted = None
                 try:
                     reverting, reverted, reverted_to = mwreverts.api.check(session, revid) 
-                    if reverted != None:
-                        revertedcount += 1
-                        #pdb.set_trace()
-                        # tuple with date of reverted edit and date that it was reverted
-                        revert, bad, back_to = format_revert(reverted).split(' ')
-                        bad = int(bad.strip('[]'))
-                        revert = int(revert)
-                        reversions.append((revids[bad], revids[revert]))
 
                 except:
                     failures += 1
+                    
+                if (reverted != None):
+                    revertedcount += 1
+                    # tuple with date of reverted edit and date that it was reverted
+                    #print(reverted)
+                    #pdb.set_trace()
+                    revert, bad = multi_reverted(format_revert(reverted))
+                    if not (isinstance(bad, list)):
+                        new_row = {'fname': fname, 'edit': revids[bad], \
+                                   'reverted': revids[revert]}
+                    else:
+                        for i in range(len(bad)):
+                            new_row = {'fname': fname, 'edit': revids[bad[i]], \
+                                       'reverted': revids[revert]}
+                    #pdb.set_trace()
+                    df = df.append(new_row, ignore_index = True)
                 #print("reverting:", format_revert(reverting))
                 #print("reverted:", format_revert(reverted))
                 #print("reverted_to:", format_revert(reverted_to))
@@ -80,56 +106,8 @@ if True:
             if netcount != 0:
                 print("Reverted / Total:", revertedcount/netcount)
             print("Failures:", failures) #https://github.com/mediawiki-utilities/python-mwreverts/issues/11
-            print(reversions)
             print("---------------")
-
-
-
-
-
-
-
-'''
-#pdb.set_trace()
-
-reverting, reverted, reverted_to = \
-    mwreverts.api.check(session, reverted.reverting['revid'])
-print("reverting:", format_revert(reverting))
-print("reverted:", format_revert(reverted))
-print("reverted_to:", format_revert(reverted_to))
-
-print("---------------")
-
-reverting, reverted, reverted_to = \
-    mwreverts.api.check(session, reverting.reverted_to['revid'])
-print("reverting:", format_revert(reverting))
-print("reverted:", format_revert(reverted))
-print("reverted_to:", format_revert(reverted_to))
-
-print("---------------")
-print("Let's to detect from deleted edits")
-print("---------------")
-
-mwapi.cli.do_login(session, "English Wikipedia")
-reverting, reverted, reverted_to = \
-    mwreverts.api.check_deleted(session, 587400097)
-print("reverting:", format_revert(reverting))
-print("reverted:", format_revert(reverted))
-print("reverted_to:", format_revert(reverted_to))
-
-print("---------------")
-
-reverting, reverted, reverted_to = \
-    mwreverts.api.check_deleted(session, reverted.reverting['revid'])
-print("reverting:", format_revert(reverting))
-print("reverted:", format_revert(reverted))
-print("reverted_to:", format_revert(reverted_to))
-
-print("---------------")
-
-reverting, reverted, reverted_to = \
-    mwreverts.api.check_deleted(session, reverting.reverted_to['revid'])
-print("reverting:", format_revert(reverting))
-print("reverted:", format_revert(reverted))
-print("reverted_to:", format_revert(reverted_to))
-'''
+            
+            
+df.to_csv("../data/reversions/reversions_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") \
+          + ".csv", index=False)
