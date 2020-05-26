@@ -59,6 +59,36 @@ def printAuthStats(keys):
     for a in keys:
         # Print language abbrev : number of unique authors
         print(a.split("_")[2], ":", len(authors[a]))
+        
+        
+def crossLanguage(lang1, lang2, authors):
+    '''
+    Hastily written cross-language Jaccard method
+    '''
+    lang1keys = [k for k in authors.keys() if ('_' + lang1 + '_' in k) ]
+    lang2keys = [k for k in authors.keys() if ('_' + lang2 + '_' in k) ]
+    sets1List = []
+    sets2List = []
+    for key in lang1keys:
+        sets1List.append(authors[key])
+    for key in lang2keys:
+        sets2List.append(authors[key])
+    set1 = set(sets1List[0])
+    for i in range(1,len(sets1List)):
+        set1 = set1 | set(sets1List[i])
+    set2 = set(sets2List[0])
+    for i in range(1,len(sets2List)):
+        set2 = set2 | set(sets2List[i])
+        
+    venn2([set1, set2], (lang1, lang2))
+    plt.savefig(lang1 + '_' + lang2 + '_venn.png')
+    plt.clf()
+
+
+crossLanguage('en', 'hi', authors)
+crossLanguage('en', 'ur', authors)
+crossLanguage('hi', 'ur', authors)
+    
 
 
 print("KASHMIR CONFLICT - ALL TIME")

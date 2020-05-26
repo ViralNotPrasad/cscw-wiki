@@ -18,6 +18,7 @@ import json
 from os import listdir
 from os.path import isfile, join
 import re
+from dateutil import parser
 
 
 def get_revids(fname):
@@ -58,7 +59,7 @@ mypath = "../data/revisions/"
 session = mwapi.Session("https://en.wikipedia.org") 
     
   
-if True:          
+if False:          
     df = pd.DataFrame({'fname': [], 'edit': [], 'reverted': []})
     for lang in ["hi", "en", "_ur_"]:
         print("Language:", lang)
@@ -109,5 +110,26 @@ if True:
             print("---------------")
             
             
-df.to_csv("../data/reversions/reversions_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") \
-          + ".csv", index=False)
+    df.to_csv("../data/reversions/reversions_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") \
+              + ".csv", index=False)
+    
+    
+# NOTE: COPY/PASTED INTO THIS FILE WITH ONES THAT DIDN'T FAIL. USE THIS FILE.
+df = pd.read_csv("../data/reversions/reversions_26-05-2020 01-04-43.csv")
+
+df['reverted'] =  df['reverted'].apply(lambda x: parser.isoparse(x))
+df['edit'] =  df['edit'].apply(lambda x: parser.isoparse(x))
+df['diff'] = df['reverted'] - df['edit']
+print(df.head())
+
+df['diff_in_hrs'] = df['diff'].apply(lambda x: x.days * 24 + x.seconds / 60 / 60)
+print(df.head())
+
+
+summary = df['diff_in_hrs'].groupby(df['fname']).describe()
+
+summary.to_csv("../data/reversions/summary_stats_best_" + datetime.now().strftime("%d-%m-%Y %H-%M-%S") \
+               + ".csv", index=True)
+
+
+
