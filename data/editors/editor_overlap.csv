@@ -1,0 +1,15 @@
+Article,Language,A-B,A AND B,B-A,JI,SCALE,Percent editors who also edited any other page in that language
+A370,English,150,33,475,0.05,183,18
+Insurgency,English,119,42,497,0.06,161,26
+KC,English,130,42,486,0.06,172,24
+Pulwama,English,108,26,524,0.04,134,19
+Reorg Act,English,78,28,552,0.04,106,26
+A370,Hindi,29,15,93,0.11,44,34
+Insurgency,Hindi,22,11,104,0.08,33,33
+KC,Hindi,38,14,85,0.1,52,27
+Pulwama,Hindi,21,8,108,0.06,29,28
+Reorg Act,Hindi,6,5,126,0.04,11,45
+A370,Urdu,2,10,16,0.36,12,83
+KC,Urdu,11,7,10,0.25,18,39
+Pulwama,Urdu,4,8,16,0.29,12,67
+Reorg Act,Urdu,0,3,25,0.11,3,100
