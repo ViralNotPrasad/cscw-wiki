@@ -38,24 +38,25 @@ def find_ips(mypath, fname):
 
             
 mypath = "../data/editors/"
-author_files = [f for f in listdir(mypath) if ("authors_" in f)]
+author_files = [f for f in listdir(mypath) if ("authors_" in f)] # date!!!
 
 en = []
 hi = []
 ur = []
 
-for fname in author_files:
-    ip_ratio = find_ips(mypath, fname)
-    if "_en_" in fname:
-        en.append(ip_ratio)
-    elif "_hi_" in fname:
-        hi.append(ip_ratio)
-    else:
-        ur.append(ip_ratio)
-        
-for lang_list in [en, hi, ur]:
-    print("Mean:", mean(lang_list))
-    print("Standard dev:", stdev(lang_list))
+if False: # don't unfalse this
+  for fname in author_files:
+      ip_ratio = find_ips(mypath, fname)
+      if "_en_" in fname:
+          en.append(ip_ratio)
+      elif "_hi_" in fname:
+          hi.append(ip_ratio)
+      else:
+          ur.append(ip_ratio)
+          
+  for lang_list in [en, hi, ur]:
+      print("Mean:", mean(lang_list))
+      print("Standard dev:", stdev(lang_list))
     
 # Now, want IP edits over all edits
     
@@ -84,16 +85,17 @@ mypath = "../data/revisions/"
 rev_files =  [f for f in listdir(mypath) if (isfile(join(mypath, f)) and ("history" not in f))]
 
 for fname in rev_files:
-    nonIP, IP = get_editors(mypath + fname)
-    ip_ratio = len(IP) / (len(nonIP) + len(IP))
-    if "_en_" in fname:
-        en2.append(ip_ratio)
-    elif "_hi_" in fname:
-        hi2.append(ip_ratio)
-    else:
-        ur2.append(ip_ratio)
+    if "_article" in fname:
+        nonIP, IP = get_editors(mypath + fname)
+        ip_ratio = len(IP) / (len(nonIP) + len(IP))
+        if "_en_" in fname:
+            en2.append(ip_ratio)
+        elif "_hi_" in fname:
+            hi2.append(ip_ratio)
+        else:
+            ur2.append(ip_ratio)
         
 for lang_list in [en2, hi2, ur2]:
     print("Mean:", mean(lang_list))
-    print("Standard dev:", stdev(lang_list))
+    #print("Standard dev:", stdev(lang_list))
     

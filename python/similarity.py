@@ -2,10 +2,10 @@ from os import listdir
 from os.path import isfile, join
 import json
 import pandas as pd
-import csv
 import matplotlib
 from matplotlib_venn import venn2
 from matplotlib import pyplot as plt
+import pdb
 matplotlib.use('nbAgg')
 
 date = '15-05-2020'
@@ -40,13 +40,11 @@ for article, data in authors.items():
 
 def jaccard(main, therest):
     '''
-    jaccard computer. takes the list of authors of the
-    "main" article and the list of authors of THE REST
-    of the articles, however many, and returns the 
-    jaccard coefficient
+    jaccard computer. takes two sets of authors and returns the size of the 
+    intersection over the size of the union
     '''
     common = list(set(main) & set(therest))
-    return len(common)/(len(therest)-len(common))
+    return len(common)/(len(therest) + len(main) - len(common))
 
 def fname(which, lang):
     '''
@@ -65,8 +63,9 @@ def crossLanguage(lang1, lang2, authors):
     '''
     Hastily written cross-language Jaccard method
     '''
-    lang1keys = [k for k in authors.keys() if ('_' + lang1 + '_' in k) ]
-    lang2keys = [k for k in authors.keys() if ('_' + lang2 + '_' in k) ]
+    lang1keys = [k for k in authors.keys() if ('_' + lang1 + '_' in k and (date in k)) ]
+    lang2keys = [k for k in authors.keys() if ('_' + lang2 + '_' in k and (date in k)) ]
+    pdb.set_trace()
     sets1List = []
     sets2List = []
     for key in lang1keys:
@@ -153,6 +152,7 @@ for lang in ['hi', 'ur', 'en']:
 
 
 # Venn diagrams
+pdb.set_trace()
 
 venn_ur = venn2([set(authors['authors_article_ur_' + date]), set(authors['authors_kash_ur_' + date] \
                  + authors['authors_pulwama_ur_' + date] + authors['authors_reorg_ur_' + date])], ('Urdu Article 370', 'The Rest'))
@@ -169,7 +169,14 @@ venn_en = venn2([set(authors['authors_article_en_' + date]), set(authors['author
 plt.savefig('English_authors_article370.png')
 plt.clf()
 
+print("UNIQUE ENGLISH AUTHORS:", len(set(authors['authors_kash_en_' + date] + authors['authors_article_en_' + date] \
+                 + authors['authors_pulwama_en_' + date] + authors['authors_reorg_en_' + date] + authors['authors_insurg_en_' + date])))
 
+print("UNIQUE URDU AUTHORS:", len(set(authors['authors_kash_ur_' + date] + authors['authors_article_ur_' + date] \
+                 + authors['authors_pulwama_ur_' + date] + authors['authors_reorg_ur_' + date])))
+
+print("UNIQUE ENGLISH AUTHORS:", len(set(authors['authors_kash_hi_' + date] + authors['authors_article_hi_' + date] \
+                 + authors['authors_pulwama_hi_' + date] + authors['authors_reorg_hi_' + date] + authors['authors_insurg_hi_' + date])))
 
 venn_ur = venn2([set(authors['authors_kash_ur_' + date]), set(authors['authors_article_ur_' + date] \
                  + authors['authors_pulwama_ur_' + date] + authors['authors_reorg_ur_' + date])], ('Urdu Kashmir Conflict', 'The Rest'))
